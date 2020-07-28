@@ -1,0 +1,95 @@
+---
+title: "TSS"
+author: "Eneritz"
+date: "7/27/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+TSS
+```{r}
+###############################r  
+          table <- read.table("/home/eneritz/EAsoft/TSSdist_SACS.txt", stringsAsFactors=F)  
+          library(ggplot2)
+          
+        # Basic box plot
+        p <- ggplot(table, aes(x=SACS, y=len)) + 
+          geom_boxplot()
+        p
+        # Rotate the box plot
+p + coord_flip()
+# Notched box plot
+ggplot(table, aes(x=SACS, y=len)) + 
+  geom_boxplot(notch=TRUE)
+# Change outlier, color, shape and size
+ggplot(ToothGrowth, aes(x=dose, y=len)) + 
+  geom_boxplot(outlier.colour="red", outlier.shape=8,
+                outlier.size=4)
+
+
+# Box plot with dot plot
+p + geom_dotplot(binaxis='y', stackdir='center', dotsize=1)
+# Box plot with jittered points
+# 0.2 : degree of jitter in x direction
+p + geom_jitter(shape=16, position=position_jitter(0.2))
+
+
+#######
+
+         table <- read.table("/home/eneritz/EAsoft/TSSdist_SACS_gene_length_exonN.txt", stringsAsFactors=F)  
+                  library(ggplot2)
+           colnames(table) <- c( "SACS" , "Dist_to_TSS" , "exon" , "ens" , "gene" )       
+                # Basic box plot
+                p <- ggplot(table, aes(x=SACS, y=Dist_to_TSS)) + 
+                  geom_boxplot()
+                p
+         
+        ylim1 = boxplot.stats(table$Dist_to_TSS)$stats[c(1, 5)]
+        
+         p1 = p + coord_cartesian(ylim = ylim1*1.05)        
+  p1 + geom_jitter(shape=16, position=position_jitter(0.2))
+         
+           ##TSSdist_ENSannot.eps     
+               # Rotate the box plot
+p + coord_flip()
+# Notched box plot
+ggplot(table, aes(x=SACS, y=Dist_to_TSS)) + 
+  geom_boxplot(notch=TRUE)
+# Change outlier, color, shape and size
+ggplot(ToothGrowth, aes(x=dose, y=Dist_to_TSS)) + 
+  geom_boxplot(outlier.colour="red", outlier.shape=8,
+                outlier.size=4)
+ ylim1 = boxplot.stats(table$Dist_to_TSS)$stats[c(1, 5)]
+        
+         p1 = p + coord_cartesian(ylim = ylim1*1.05)  
+
+# Box plot with dot plot
+p + geom_dotplot(binaxis='y', stackdir='center', dotsize=1)
+# Box plot with jittered points
+# 0.2 : degree of jitter in x direction
+p + geom_jitter(shape=16, position=position_jitter(0.2))
+
+####
+  table <- read.table("/home/eneritz/EAsoft/TSSdist_SACS_gene_length_exonN.table", stringsAsFactors=F)  
+                  library(ggplot2)
+           colnames(table) <- c( "SACS" , "Number_of_events" , "Exon_number"  )       
+
+library(ggplot2)
+  ggplot(data=as.data.frame(table), aes(x=Exon_number, y=Number_of_events, fill=SACS)) +
+  geom_bar(stat="identity")+
+ # geom_text(aes(y=label_ypos, label=pcount), vjust=1.6, 
+  #          color="white", size=3.5)+
+  #scale_fill_brewer(palette="Paired")+
+theme(axis.text.x = element_text(angle = 70, hjust = 1))
+  #    theme_minimal()
+
+#Exon_position_counts.eps
+
+``` 
+```{r}
+boxplot( log(prueba[,2]) , log(k20[,2]) ,  log(k9[,2]) ,  log(k14[,4]) , log(pruebai[,2]) , log(k91[,2]) , log(k9i[,2]) , log(const[,4]) , outline=F , names=c( "Excluded" ,  "K20+K79Exc" ,  "K9+5mCExc" , "K9+K14acExc" , "Included" , "K20+K91Inc" , "K9+5mCInc" , "Const"  ) , ylab="Expression levels Log(TPM)" , las=1 ,  border=c("blue", "dodgerblue", "dodgerblue", "dodgerblue4" , "red", "orange", "firebrick3" , "black" ) ,  col =c("lightgray", "white" ,"white" , "white" , "lightgray" , "white" , "white" , "lightgrey"   ) , cex=0.3 )
+
+
+```

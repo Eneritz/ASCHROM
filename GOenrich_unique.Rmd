@@ -1,0 +1,169 @@
+---
+title: "Go_unique"
+author: "Eneritz"
+date: "7/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+#####input the liss of genes per group and plot it as a barplot
+K14_K9_genes <- read.table("/home/eneritz/KIshared/Molekylär\ Neurobiologi/Castelo-Branco/Eneritz/ASCHRM/ASCHROM_120119/K14_K9_E_gene_list" , sep="\t" ) 
+K20_K79_genes <- read.table("/home/eneritz/KIshared/Molekylär\ Neurobiologi/Castelo-Branco/Eneritz/ASCHRM/ASCHROM_120119/K20_K79_E_gene_list" , sep="\t" ) 
+
+K4_K27_genes <- read.table("/home/eneritz/KIshared/Molekylär\ Neurobiologi/Castelo-Branco/Eneritz/ASCHRM/ASCHROM_120119/K4_K27_E_gene_list" , sep="\t" ) 
+K9_5mC_E_genes <- read.table("/home/eneritz/KIshared/Molekylär\ Neurobiologi/Castelo-Branco/Eneritz/ASCHRM/ASCHROM_120119/K9_5mC_E_gene_list" , sep="\t" ) 
+
+K20_K91_genes <- read.table("/home/eneritz/KIshared/Molekylär\ Neurobiologi/Castelo-Branco/Eneritz/ASCHRM/ASCHROM_120119/K20_K91_I_gene_list" , sep="\t" )
+
+K4me1_K4me2_genes <- read.table("/home/eneritz/KIshared/Molekylär\ Neurobiologi/Castelo-Branco/Eneritz/ASCHRM/ASCHROM_120119/K4me1_K4me2_I_gene_list" , sep="\t" ) 
+
+K9_5mC_I_genes <- read.table("/home/eneritz/KIshared/Molekylär\ Neurobiologi/Castelo-Branco/Eneritz/ASCHRM/ASCHROM_120119/K9_5mC_I_gene_list" , sep="\t" ) 
+
+Excluded_genes <- read.table("/home/eneritz/KIshared/Molekylär\ Neurobiologi/Castelo-Branco/Eneritz/ASCHRM/ASCHROM_120119/Unique_Genes.EXCLUDED_exons.notSelected" , sep="\t" ) 
+Included_genes <- read.table("/home/eneritz/KIshared/Molekylär\ Neurobiologi/Castelo-Branco/Eneritz/ASCHRM/ASCHROM_120119/Unique_Genes.INCLUDED_exons.notSelected" , sep="\t" ) 
+
+library(enrichR)
+```
+
+```{r}
+603 /media/eneritz/Elements/ASCHROM18/selected_genes.tab
+  71 /media/eneritz/Elements/ASCHROM18/selected_K14_K9_genes.tab
+  80 /media/eneritz/Elements/ASCHROM18/selected_K20_K79_genes.tab
+  90 /media/eneritz/Elements/ASCHROM18/selected_K20_K91_genes.tab
+  17 /media/eneritz/Elements/ASCHROM18/selected_K4_K27_genes.tab
+ 185 /media/eneritz/Elements/ASCHROM18/selected_K4me1_K4me2_genes.tab
+  46 /media/eneritz/Elements/ASCHROM18/selected_K9_5mC_EXC_genes.tab
+  80 /media/eneritz/Elements/ASCHROM18/selected_K9_5mC_INC_genes.tab
+```
+  
+```{r}  
+K14_K9_genes <- read.table("/media/eneritz/Elements/ASCHROM18/selected_genes.tab" , sep="\t" )   
+K20_K79_genes <- read.table("/media/eneritz/Elements/ASCHROM18/selected_K20_K79_genes.tab" , sep="\t" ) 
+
+K4_K27_genes <- read.table("/media/eneritz/Elements/ASCHROM18/selected_K4_K27_genes.tab" , sep="\t" ) 
+K9_5mC_E_genes <- read.table("/media/eneritz/Elements/ASCHROM18/selected_K9_5mC_EXC_genes.tab" , sep="\t" ) 
+
+K20_K91_genes <- read.table("/media/eneritz/Elements/ASCHROM18/selected_K20_K91_genes.tab" , sep="\t" )
+
+K4me1_K4me2_genes <- read.table("/media/eneritz/Elements/ASCHROM18/selected_K4me1_K4me2_genes.tab" , sep="\t" ) 
+
+K9_5mC_I_genes <- read.table("/media/eneritz/Elements/ASCHROM18/selected_K9_5mC_INC_genes.tab" , sep="\t" ) 
+
+Excluded_genes <- read.table("/home/eneritz/KIshared/Molekylär\ Neurobiologi/Castelo-Branco/Eneritz/ASCHRM/ASCHROM_120119/Unique_Genes.EXCLUDED_exons.notSelected" , sep="\t" ) 
+Included_genes <- read.table("/home/eneritz/KIshared/Molekylär\ Neurobiologi/Castelo-Branco/Eneritz/ASCHRM/ASCHROM_120119/Unique_Genes.INCLUDED_exons.notSelected" , sep="\t" ) 
+
+
+
+library(enrichR)
+dbs <- listEnrichrDbs()
+dbs <- c("GO_Molecular_Function_2018", "GO_Cellular_Component_2018", "GO_Biological_Process_2018" , "Reactome_2016" ,"KEGG_2019_Human")
+enriched <- enrichr(as.vector(t(K14_K9_genes)), dbs)
+#printEnrich(enriched, "output.txt" , sep = "\t", columns = c(1:9))
+
+bp1 <- enriched[["GO_Biological_Process_2018"]]
+
+bp2 <- enriched[["Reactome_2016"]]
+
+bp3 <- enriched[["KEGG_2019_Human"]]
+
+write.table( bp1 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K14_K9_E_GOBP.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+write.table( bp2 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K14_K9_E_reactome16.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+write.table( bp3 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K14_K9_E_KEGG19.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+
+enriched <- enrichr(as.vector(t(K20_K79_genes)), dbs)
+#printEnrich(enriched, "output.txt" , sep = "\t", columns = c(1:9))
+
+bp1 <- enriched[["GO_Biological_Process_2018"]]
+
+bp2 <- enriched[["Reactome_2016"]]
+
+bp3 <- enriched[["KEGG_2019_Human"]]
+
+write.table( bp1 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K20_K79_E_GOBP.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+write.table( bp2 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K20_K79_E_reactome16.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+write.table( bp3 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K20_K79_E_KEGG19.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+
+
+
+enriched <- enrichr(as.vector(t(K4_K27_genes)), dbs)
+#printEnrich(enriched, "output.txt" , sep = "\t", columns = c(1:9))
+
+bp1 <- enriched[["GO_Biological_Process_2018"]]
+
+bp2 <- enriched[["Reactome_2016"]]
+
+bp3 <- enriched[["KEGG_2019_Human"]]
+
+write.table( bp1 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K4_K27_E_GOBP.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+write.table( bp2 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K4_K27_E_reactome16.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+write.table( bp3 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K4_K27_E_KEGG19.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+
+
+
+enriched <- enrichr(as.vector(t(K9_5mC_E_genes)), dbs)
+#printEnrich(enriched, "output.txt" , sep = "\t", columns = c(1:9))
+
+bp1 <- enriched[["GO_Biological_Process_2018"]]
+
+bp2 <- enriched[["Reactome_2016"]]
+
+bp3 <- enriched[["KEGG_2019_Human"]]
+
+write.table( bp1 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K9_5mC_E_GOBP.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+write.table( bp2 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K9_5mC_E_reactome16.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+write.table( bp3 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K9_5mC_E_KEGG19.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+
+
+
+enriched <- enrichr(as.vector(t(K20_K91_genes)), dbs)
+#printEnrich(enriched, "output.txt" , sep = "\t", columns = c(1:9))
+
+bp1 <- enriched[["GO_Biological_Process_2018"]]
+
+bp2 <- enriched[["Reactome_2016"]]
+
+bp3 <- enriched[["KEGG_2019_Human"]]
+
+write.table( bp1 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K20_K91_GOBP.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+write.table( bp2 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K20_K91_reactome16.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+write.table( bp3 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K20_K91_KEGG19.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+
+
+
+enriched <- enrichr(as.vector(t(K4me1_K4me2_genes)), dbs)
+#printEnrich(enriched, "output.txt" , sep = "\t", columns = c(1:9))
+
+bp1 <- enriched[["GO_Biological_Process_2018"]]
+
+bp2 <- enriched[["Reactome_2016"]]
+
+bp3 <- enriched[["KEGG_2019_Human"]]
+
+write.table( bp1 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K4me1_K4me2_GOBP.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+write.table( bp2 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K4me1_K4me2_reactome16.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+write.table( bp3 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K4me1_K4me2_KEGG19.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+
+
+
+
+enriched <- enrichr(as.vector(t(K9_5mC_I_genes)), dbs)
+#printEnrich(enriched, "output.txt" , sep = "\t", columns = c(1:9))
+
+bp1 <- enriched[["GO_Biological_Process_2018"]]
+
+bp2 <- enriched[["Reactome_2016"]]
+
+bp3 <- enriched[["KEGG_2019_Human"]]
+
+write.table( bp1 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K9_5mC_I_GOBP.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+write.table( bp2 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K9_5mC_I_reactome16.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+write.table( bp3 , file =  "/home/eneritz/ASCHROM2020/Revision/GO_repeat/K9_5mC_I_KEGG19.txt", sep="\t",row.names = T, col.names = TRUE, quote = FALSE)
+
+
+
+
+
+```

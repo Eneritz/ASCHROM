@@ -1,0 +1,48 @@
+---
+title: "nucleosome"
+author: "Eneritz"
+date: "7/27/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+*.nucpos.bed.gz. Dyad position here means the center point of the DNA that would be wrapped around the nucleosome. 
+```{bash}
+###intersect
+
+ awk  '{    { print $1"\t"$3"\t"$4"\t"$6  }}'  /home/eneritz/ASCHROM2020/Revision/SACS1_events.txt > /home/eneritz/ASCHROM2020/Revision/SACS1_events.bed  
+
+ awk  '{    { print $1"\t"$3"\t"$4"\t"$6  }}'  /home/eneritz/ASCHROM2020/Revision/SACS2_events.txt  > /home/eneritz/ASCHROM2020/Revision/SACS2_events.bed 
+
+ awk  '{    { print $1"\t"$3"\t"$4"\t"$6  }}'  /home/eneritz/ASCHROM2020/Revision/SACS3_events.txt  > /home/eneritz/ASCHROM2020/Revision/SACS3_events.bed
+  
+ awk  '{    { print $1"\t"$3"\t"$4"\t"$6  }}'  /home/eneritz/ASCHROM2020/Revision/SACS4_events.txt  > /home/eneritz/ASCHROM2020/Revision/SACS4_events.bed
+
+ awk  '{    { print $1"\t"$3"\t"$4"\t"$6  }}'  /home/eneritz/ASCHROM2020/Revision/SACS5_events.txt  > /home/eneritz/ASCHROM2020/Revision/SACS5_events.bed
+
+ awk  '{    { print $1"\t"$3"\t"$4"\t"$6  }}'  /home/eneritz/ASCHROM2020/Revision/SACS6_events.txt  > /home/eneritz/ASCHROM2020/Revision/SACS6_events.bed
+  
+   awk  '{    { print $1"\t"$3"\t"$4"\t"$6  }}'  /home/eneritz/ASCHROM2020/Revision/SACS7_events.txt  > /home/eneritz/ASCHROM2020/Revision/SACS7_events.bed
+  
+  # cat the beds and compute matrix
+
+./bedGraphToBigWig H1hesc_atac_rep1_gappedpeaks.nucatac_ens72.out.occ.bedgraph   /home/eneritz/Tools/proatac/proatac/anno/bedtools/chrom_hg19.sizes  H1hesc_atac_rep1_gappedpeaks.nucatac_ens72.out.occ.bw
+
+cat  /home/eneritz/ASCHROM2020/Revision/SACS*_events.bed > /home/eneritz/ASCHROM2020/Revision/SACS_events.bed
+
+
+
+
+computeMatrix reference-point   --referencePoint center  -b 500 -a 500  -R /home/eneritz/ASCHROM2020/Revision/SACS_events.bed  -S   H1hesc_atac_rep1_gappedpeaks.nucatac_ens72.out.occ.bw      -o matrix_nucleosome1.gz   --outFileSortedRegions matrix_nucleosomoe1.bed  --skipZeros
+
+plotHeatmap -m matrix_nucleosome1.gz  -out nucleosome1_heatmap.png   --colorMap 'viridis' --refPointLabel 'exon center'  --boxAroundHeatmaps no --regionsLabel '   '  --legendLocation none --xAxisLabel 'peak center ref (bp)'  --whatToShow 'heatmap and colorbar'
+
+
+###test with all the exons
+
+ gunzip RefSeqExon.hg19.bed.gz 
+ computeMatrix reference-point   --referencePoint center  -b 2000 -a 2000  -R RefSeqExon.hg19.bed  -S   H1hesc_atac_rep1_gappedpeaks.nucatac_ens72.out.occ.bw      -o matrix_exons_nucleosome1.gz   --outFileSortedRegions matrix_exons_nucleosomoe1.bed 
+
+```
